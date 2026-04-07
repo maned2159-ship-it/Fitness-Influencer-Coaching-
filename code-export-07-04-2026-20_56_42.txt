@@ -1,0 +1,103 @@
+
+ users {
+  user_id int [pk]
+  name varchar
+  email varchar [unique]
+  phone varchar
+  role varchar  
+  created_at timestamp
+}
+
+trainers {
+  trainer_id int [pk, ref: > users.user_id]
+  bio text
+  specialization varchar
+  experience_years int
+}
+
+clients {
+  client_id int [pk, ref: > users.user_id]
+  age int
+  gender varchar
+  fitness_goal text
+}
+
+services {
+  service_id int [pk]
+  trainer_id int [ref: > trainers.trainer_id]  
+  type varchar  
+  title varchar
+  description text
+  price decimal
+}
+
+ purchases {
+  purchase_id int [pk]
+  client_id int [ref: > clients.client_id]     
+  service_id int [ref: > services.service_id]  
+  start_date date
+  end_date date
+  status varchar
+}
+
+ consultations {
+  consult_id int [pk]
+  purchase_id int [ref: > purchases.purchase_id] 
+  scheduled_time timestamp
+  meeting_link text
+  status varchar
+}
+
+ live_sessions {
+  session_id int [pk]
+  service_id int [ref: > services.service_id] 
+  session_time timestamp
+  duration int
+  meeting_link text
+}
+
+session_attendance {
+  attendance_id int [pk]
+  session_id int [ref: > live_sessions.session_id] 
+  client_id int [ref: > clients.client_id]
+  status varchar
+}
+
+ workout_plans {
+  plan_id int [pk]
+  service_id int [ref: > services.service_id] 
+  details text
+}
+
+ diet_plans {
+  diet_id int [pk]
+  service_id int [ref: > services.service_id] 
+  details text
+}
+
+progress {
+  progress_id int [pk]
+  client_id int [ref: > clients.client_id] 
+  date date
+  weight decimal
+  body_fat decimal
+  measurements text
+  notes text
+}
+
+ checkins{
+  checkin_id int [pk]
+  client_id int [ref: > clients.client_id]   
+  trainer_id int [ref: > trainers.trainer_id]
+  date date
+  feedback text
+  next_steps text
+}
+
+messages {
+  message_id int [pk]
+  sender_id int [ref: > users.user_id]
+  receiver_id int [ref: > users.user_id]
+  content text
+  timestamp timestamp
+}
